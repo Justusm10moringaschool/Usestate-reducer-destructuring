@@ -1,24 +1,48 @@
 // import { useReducer } from 'react';
-import { useState } from "react";
+import { useReducer } from "react";
+
+function reducer(state, action){
+  switch(action.type){
+    case 'increment':
+      return {count: state.count + action.num};
+    case 'decrement':
+      return {count: state.count - action.num };
+    default:
+      throw new Error('unknown action type ');
+  }
+
+}
 
 export default function App() {
-  const [count, setCount] = useState(0);
+  const [state, dispatch] = useReducer(reducer, {
+    count: 0
+  })
 
   return (
     <>
-    <Counter count={count} setCount={setCount }/>
+    <Counter count={state.count} 
+    onClick = {()=> dispatch({
+      type: 'increment',
+      num: 1
+    })}
+    />
+
+    <Counter count={state.count} 
+    onClick = {() => dispatch({
+      type: 'decrement',
+      num: 4
+    })}
+    />
     </>
   );
 }
 
-function Counter({count, setCount}) {
+function Counter({count, onClick}) {
   return (
     <>
       <div>
         <button
-          onClick={() => {
-            setCount(count + 1);
-          }}
+          onClick={onClick}
         >
           Increment
         </button>
